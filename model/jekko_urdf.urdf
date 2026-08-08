@@ -1,0 +1,166 @@
+<?xml version="1.0" ?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="jekko" >
+
+    <!--xacro:property name="path" value="/home/ubuntu/ros2_ws/src/jekko/model/meshes"/-->
+    
+    <xacro:property name="path" value="$(find jekko)/model/meshes"/>
+
+    <!-- Link Defs -->
+
+    <link name="world"/>
+   
+    <link name="base_link">
+        <visual>
+            <geometry>
+                <mesh filename="file://${path}/base_link.dae" scale="0.01 0.01 0.01"></mesh>
+            </geometry>
+            <origin rpy="1.571 0 0"  xyz="0 0 0 "/>
+        </visual>
+    </link>
+
+    <link name="boom_rotatory_link">
+        <visual>
+            <geometry>
+                <mesh filename="file://${path}/boom_rotatory_link.dae" scale="0.01 0.01 0.01"></mesh>
+            </geometry>
+            <origin rpy="1.571 0 0" xyz="0 0 0 "/>
+        </visual>
+    </link>
+
+    <link name="boom_arm_1">
+        <visual>
+            <geometry>
+                <mesh filename="file://${path}/boom_arm_1.dae" scale="0.01 0.01 0.01"></mesh>
+            </geometry>
+            <origin rpy="1.571 0 0" xyz="0 0 0 "/>
+        </visual>
+    </link>
+
+    <link name="boom_arm_2">
+        <visual>
+            <geometry>
+                <mesh filename="file://${path}/boom_arm_2.dae" scale="0.01 0.01 0.01"></mesh>
+            </geometry>
+            <origin rpy="1.571 0 0" xyz="0 0 0 "/>
+        </visual>
+    </link>
+
+    <link name="boom_arm_3">
+        <visual>
+            <geometry>
+                <mesh filename="file://${path}/boom_arm_3.dae" scale="0.01 0.01 0.01"></mesh>
+            </geometry>
+            <origin rpy="1.571 0 0" xyz="0 0 0 "/>
+        </visual>
+    </link>
+
+    <link name="boom_arm_4">
+        <visual>
+            <geometry>
+                <mesh filename="file://${path}/boom_arm_4.dae" scale="0.01 0.01 0.01"></mesh>
+            </geometry>
+            <origin rpy="1.571 0 0" xyz="0 0 0 "/>
+        </visual>
+    </link>
+
+    <link name="boom_arm_5">
+        <visual>
+            <geometry>
+                <mesh filename="file://${path}/boom_arm_5.dae" scale="0.01 0.01 0.01"></mesh>
+            </geometry>
+            <origin rpy="1.571 0 0" xyz="0 0 0 "/>
+        </visual>
+    </link>
+
+    <link name="hook_link">
+        <visual>
+            <geometry>
+                <mesh filename="file://${path}/hook_link.dae" scale="0.01 0.01 0.01"></mesh>
+            </geometry>
+            <origin rpy="1.571 0 0" xyz="0 0 0 "/>
+        </visual>
+    </link>
+
+
+    <!-- Joint Defs -->
+
+    <joint name="world_base" type="fixed">
+        <parent link="world"/>
+        <child link="base_link"/>
+    </joint>
+
+    <joint name="base_rotatory" type="revolute">
+        <parent link="base_link"/>
+        <child link="boom_rotatory_link"/>
+        <axis xyz="0 0 1"/>
+        <origin xyz="0.0 0.0 0.663632"></origin> 
+        <limit effort="100" velocity="100" lower="-1.57" upper="1.57"/>
+    </joint>
+
+    <joint name="rotatory_arm1" type="revolute">
+        <parent link="boom_rotatory_link"/>
+        <child link="boom_arm_1"/>
+        <axis xyz="0 -1 0"/>
+        <origin xyz="-0.424197 0.0 0.956493"></origin>
+        <!--"-0.424197 0.0 0.956493"-->
+        <limit effort="100" velocity="100" lower="0.00" upper="1.40"/>
+    </joint>
+
+    <joint name="arm1_arm2" type="prismatic">
+        <parent link="boom_arm_1"/>
+        <child link="boom_arm_2"/>
+        <origin xyz="-0.304863 0.0 0.207778"></origin>
+        <limit effort="100" velocity="100" lower="0.0" upper="1.90"/>
+        <axis xyz="1 0 0"></axis>
+        <!-- <origin xyz="-0.224863 0.0 0.257778"></origin> -->
+    </joint>
+
+    <joint name="arm2_arm3" type="prismatic">
+        <parent link="boom_arm_2"/>
+        <child link="boom_arm_3"/>
+        <origin xyz="0.02 0.0 -0.021"></origin>
+        <limit effort="100" velocity="100" lower="0.0" upper="1.20"/>
+        <axis xyz="1 0 0"></axis>
+        <!-- <origin xyz="0.02 0.0 -0.021"></origin> -->
+    </joint>
+
+    <joint name="arm3_arm4" type="prismatic">
+        <parent link="boom_arm_3"/>
+        <child link="boom_arm_4"/>
+        <origin xyz="0.02 0.0 -0.021"></origin>
+        <limit effort="100" velocity="100" lower="0.0" upper="1.3"/>
+        <axis xyz="1 0 0"></axis>
+        <!--<origin xyz="0.02 0.0 -0.021"></origin>-->
+    </joint>
+
+    <joint name="arm4_arm5" type="prismatic">
+        <parent link="boom_arm_4"/>
+        <child link="boom_arm_5"/>
+        <origin xyz="0.02 0.0 -0.021"></origin>
+        <limit effort="100" velocity="100" lower="0.0" upper="0.70"/>
+        <axis xyz="1 0 0"></axis>
+        <!-- <origin xyz="0.02 0.0 -0.021"></origin>    -->
+    </joint>
+
+    <link name="hook_rotation"/>
+
+    <joint name="arm5_hook_rotatory" type="revolute">
+        <parent link="boom_arm_5"/>
+        <child link="hook_rotation"/>
+        <origin xyz="2.328 0.0 -0.106"></origin>
+        <limit effort="100" velocity="100" lower="0.0" upper="10.00"/>
+        <axis xyz="0 1 0"></axis>
+        <!-- <origin xyz="2.328 0.0 -0.106"></origin> -->
+    </joint>
+
+    <joint name="arm5_hook_prismatic" type="prismatic">
+        <parent link="hook_rotation"/>
+        <child link="hook_link"/>
+        <origin xyz="0.0 0.0 0.0"></origin>
+        <limit effort="100" velocity="100" lower="0.0" upper="10.00"/>
+        <axis xyz="0 0 -1"></axis>
+        <!-- <origin xyz="2.328 0.0 -0.106"></origin> -->
+    </joint>
+
+    
+</robot>
